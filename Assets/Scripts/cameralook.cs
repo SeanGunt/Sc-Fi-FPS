@@ -5,11 +5,8 @@ using UnityEngine;
 public class cameralook : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
-
     public Transform playerBody;
-
     float xRotation = 0f;
-
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
