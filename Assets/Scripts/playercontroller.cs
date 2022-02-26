@@ -5,7 +5,7 @@ using UnityEngine;
 public class playercontroller : MonoBehaviour
 {
   CharacterController controller;
-  public float speed = 10f;
+  float speed = 10f;
   Vector3 velocity;
   float gravity = -9.81f * 1.5f;
   public Transform groundCheck;
@@ -13,6 +13,7 @@ public class playercontroller : MonoBehaviour
   public LayerMask groundMask;
   private bool isGrounded;
   public float jumpHeight = 1.5f;
+  bool isSprinting;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -32,12 +33,30 @@ public class playercontroller : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+
+        if (isSprinting)
+        {
+            speed = 11f;
+        }
+        else
+        {
+            speed = 7.5f;
+        }
     }
 }
