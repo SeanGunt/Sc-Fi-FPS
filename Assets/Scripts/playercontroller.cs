@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class playercontroller : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class playercontroller : MonoBehaviour
   public LayerMask groundMask;
   private bool isGrounded;
   public float jumpHeight = 1.5f;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -39,5 +41,15 @@ public class playercontroller : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
     }
+
+     void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+          
+                SceneManager.LoadScene(2);
+            }
+        }
 }
