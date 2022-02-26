@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class playercontroller : MonoBehaviour
 {
   CharacterController controller;
-  float speed = 10f;
+  float speed = 7.5f;
   Vector3 velocity;
   float gravity = -9.81f * 1.5f;
   public Transform groundCheck;
@@ -65,7 +65,6 @@ public class playercontroller : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
-          
                 SceneManager.LoadScene(2);
             }
         }
