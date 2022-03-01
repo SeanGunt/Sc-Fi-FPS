@@ -15,6 +15,10 @@ public class playercontroller : MonoBehaviour
   private bool isGrounded;
   public float jumpHeight = 1.5f;
   bool isSprinting;
+  Vector3 interactionRayPoint = default;
+  float interactionDistance = default;
+  bool canInteract = true;
+  public Camera playerCamera;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -60,7 +64,6 @@ public class playercontroller : MonoBehaviour
             speed = 7.5f;
         }
     }
-
      void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Enemy"))
