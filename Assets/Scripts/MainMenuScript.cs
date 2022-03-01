@@ -7,6 +7,7 @@ public class MainMenuScript : MonoBehaviour
 {
     public void Playgame()
     {
+        PauseMenu.GameIsPaused = false;
         SceneManager.LoadScene(1);
     }
 
