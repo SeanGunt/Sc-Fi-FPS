@@ -22,6 +22,10 @@ public class playercontroller : MonoBehaviour
   public AudioClip bgmusicSound;
 
   AudioSource audioSource;
+  Vector3 interactionRayPoint = default;
+  float interactionDistance = default;
+  bool canInteract = true;
+  public Camera playerCamera;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -71,9 +75,9 @@ public class playercontroller : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
+     void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
             {
                 SceneManager.LoadScene(2);
             }
