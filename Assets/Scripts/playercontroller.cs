@@ -15,9 +15,19 @@ public class playercontroller : MonoBehaviour
   private bool isGrounded;
   public float jumpHeight = 1.5f;
   bool isSprinting;
+
+  public AudioClip winSound;
+  public AudioClip loseSound;
+  public AudioClip firingSound;
+  public AudioClip bgmusicSound;
+
+  AudioSource audioSource;
     void Start()
     {
         controller = GetComponent<CharacterController>();
+
+        audioSource= GetComponent<AudioSource>();
+        audioSource.loop = true;
     }
     void Update()
     {
@@ -61,11 +71,16 @@ public class playercontroller : MonoBehaviour
         }
     }
 
-     void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Enemy"))
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
             {
                 SceneManager.LoadScene(2);
             }
-        }
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+    }
 }

@@ -9,10 +9,16 @@ public class enemycontroller : MonoBehaviour
     public float lookRadius = 15f;
     bool isAngered;
     bool isPatrolling;
+
+    public AudioClip activateSound;
+
+    AudioSource audioSource;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         startPosition = this.transform.position;
+
+        audioSource= GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -20,6 +26,7 @@ public class enemycontroller : MonoBehaviour
 
         if (distance <= lookRadius)
         {
+            PlaySound(activateSound);
             isAngered = true;
             isPatrolling = false;
         }
@@ -44,5 +51,10 @@ public class enemycontroller : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, lookRadius);
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 }
