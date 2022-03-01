@@ -1,0 +1,16 @@
+-------------------- Auto-Git Log --------------------
+		Mon Feb 28 2022 22:53:24 GMT-0500 (Eastern Standard Time)
+------------------------------------------------------
+
+Modified files:
+* Assets/Scripts/MainMenuScript.cs
+* Assets/Scripts/PauseMenu.cs
+
+
+Created files:
+
+
+Deleted files:
+
+
+Renamed files:
