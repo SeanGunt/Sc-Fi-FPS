@@ -28,7 +28,11 @@ public class PlayerController : MonoBehaviour
   float maxStamina = 4f;
   float currentStamina;
   public Image staminaBarImage;
+  public Image gunChargeImage;
   public GameObject impactEffect;
+  bool canShoot;
+  float chargeMax = 5f;
+  float currentCharge;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -37,6 +41,7 @@ public class PlayerController : MonoBehaviour
         audioSource.clip = bgmusicSound;
         audioSource.Play();
         currentStamina = maxStamina;
+        currentCharge = chargeMax;
     }
     void Update()
     {
@@ -84,6 +89,20 @@ public class PlayerController : MonoBehaviour
         {
             speed = 7.5f;
         }
+        if (!canShoot)
+        {
+            currentCharge = Mathf.Clamp(currentCharge += Time.deltaTime, 0.0f, chargeMax);
+            Mathf.Clamp(gunChargeImage.fillAmount += Time.deltaTime/5, 0.0f, 1.0f);
+        }
+
+        if (currentCharge == chargeMax)
+        {
+            canShoot = true;
+        }
+        else
+        {
+            canShoot = false;
+        }
 
         if (Input.GetKey(KeyCode.E))
         {
@@ -92,8 +111,16 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Shoot();
+            if (canShoot)
+            {
+                Shoot();
+            }
+            else
+            {
+                return;
+            }
         }
+        Debug.Log(currentCharge);
     }
 
     void Interact()
@@ -122,7 +149,9 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
+        gunChargeImage.fillAmount = 0.0f;
         audioSource.PlayOneShot(firingSound);
+        currentCharge = 0.0f;
         RaycastHit shoot;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out shoot, shootDistance))
         {
