@@ -11,12 +11,16 @@ public class EnemyController : MonoBehaviour
     bool isPatrolling;
     public AudioClip activateSound;
     AudioSource audioSource;
+    float stunnedTimer;
+    float timeStunned = 3.0f;
+    bool isStunned;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         audioSource= GetComponent<AudioSource>();
         startPosition = this.transform.position;
         audioSource.clip = activateSound;
+        stunnedTimer = timeStunned;
     }
     void Update()
     {
@@ -33,7 +37,7 @@ public class EnemyController : MonoBehaviour
             isPatrolling = true;
         }
 
-        if (isAngered)
+        if (isAngered && !isStunned)
         {
             if (!audioSource.isPlaying)
             {
@@ -42,11 +46,26 @@ public class EnemyController : MonoBehaviour
             agent.speed = 10;
             agent.SetDestination(player.transform.position);
         }
-        if (isPatrolling)
+        if (isPatrolling && !isStunned)
         {
             agent.speed = 5;
             agent.SetDestination(startPosition);
         }
+        if (isStunned)
+        {
+            agent.speed = 0;
+            stunnedTimer -= Time.deltaTime;
+            if (stunnedTimer < 0)
+            {
+                stunnedTimer = timeStunned;
+                isStunned = false;
+            }
+        }
+    }
+
+    public void Stunned()
+    {
+        isStunned = true;
     }
     void OnDrawGizmosSelected()
     {

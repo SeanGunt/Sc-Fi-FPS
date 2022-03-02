@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Mime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,10 +23,12 @@ public class PlayerController : MonoBehaviour
   AudioSource audioSource;
   public Camera playerCamera;
   float interactionDistance = 3f;
+  float shootDistance = 100.0f;
   bool keyCardGrabbed = false;
   float maxStamina = 4f;
   float currentStamina;
   public Image staminaBarImage;
+  public GameObject impactEffect;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -50,9 +53,11 @@ public class PlayerController : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded && currentStamina > 0f)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            currentStamina = currentStamina - 0.25f;
+            staminaBarImage.fillAmount = staminaBarImage.fillAmount - (0.25f/4f);
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -84,6 +89,11 @@ public class PlayerController : MonoBehaviour
         {
             Interact();
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Shoot();
+        }
     }
 
     void Interact()
@@ -107,6 +117,23 @@ public class PlayerController : MonoBehaviour
             {
                 SceneManager.LoadScene(3);
             }
+        }
+    }
+
+    void Shoot()
+    {
+        audioSource.PlayOneShot(firingSound);
+        RaycastHit shoot;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out shoot, shootDistance))
+        {
+            EnemyController enemyController = shoot.transform.GetComponent<EnemyController>();
+            if (enemyController != null)
+            {
+                enemyController.Stunned();
+            }
+            
+            GameObject impactGO = Instantiate(impactEffect, shoot.point, Quaternion.LookRotation(shoot.normal));
+            Destroy(impactGO, 2f);
         }
     }
      void OnTriggerEnter(Collider other)
