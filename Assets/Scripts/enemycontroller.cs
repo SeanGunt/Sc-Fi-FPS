@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class enemycontroller : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     public GameObject player;
     Vector3 startPosition;
@@ -9,16 +9,14 @@ public class enemycontroller : MonoBehaviour
     public float lookRadius = 15f;
     bool isAngered;
     bool isPatrolling;
-
     public AudioClip activateSound;
-
     AudioSource audioSource;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        startPosition = this.transform.position;
-
         audioSource= GetComponent<AudioSource>();
+        startPosition = this.transform.position;
+        audioSource.clip = activateSound;
     }
     void Update()
     {
@@ -26,7 +24,6 @@ public class enemycontroller : MonoBehaviour
 
         if (distance <= lookRadius)
         {
-            PlaySound(activateSound);
             isAngered = true;
             isPatrolling = false;
         }
@@ -38,6 +35,10 @@ public class enemycontroller : MonoBehaviour
 
         if (isAngered)
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
             agent.speed = 10;
             agent.SetDestination(player.transform.position);
         }
@@ -51,10 +52,5 @@ public class enemycontroller : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, lookRadius);
-    }
-
-    public void PlaySound(AudioClip clip)
-    {
-        audioSource.PlayOneShot(clip);
     }
 }

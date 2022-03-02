@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Net.Mime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class playercontroller : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
   CharacterController controller;
   float speed = 7.5f;
@@ -15,23 +15,25 @@ public class playercontroller : MonoBehaviour
   private bool isGrounded;
   public float jumpHeight = 1.5f;
   bool isSprinting;
-
   public AudioClip winSound;
   public AudioClip loseSound;
   public AudioClip firingSound;
   public AudioClip bgmusicSound;
-
   AudioSource audioSource;
-  Vector3 interactionRayPoint = default;
-  float interactionDistance = default;
-  bool canInteract = true;
   public Camera playerCamera;
+  float interactionDistance = 3f;
+  bool keyCardGrabbed = false;
+  float maxStamina = 4f;
+  float currentStamina;
+  public Image staminaBarImage;
     void Start()
     {
         controller = GetComponent<CharacterController>();
-
         audioSource= GetComponent<AudioSource>();
         audioSource.loop = true;
+        audioSource.clip = bgmusicSound;
+        audioSource.Play();
+        currentStamina = maxStamina;
     }
     void Update()
     {
@@ -59,13 +61,17 @@ public class playercontroller : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             isSprinting = true;
+            currentStamina = Mathf.Clamp(currentStamina -= Time.deltaTime, 0.0f, maxStamina);
+            Mathf.Clamp(staminaBarImage.fillAmount -= Time.deltaTime/4, 0.0f, 1.0f);
         }
         else
         {
             isSprinting = false;
+            currentStamina = Mathf.Clamp(currentStamina += Time.deltaTime, 0.0f, maxStamina);
+            Mathf.Clamp(staminaBarImage.fillAmount += Time.deltaTime/4, 0.0f, 1.0f);
         }
 
-        if (isSprinting)
+        if (currentStamina > 0.0f && isSprinting)
         {
             speed = 11f;
         }
@@ -73,18 +79,41 @@ public class playercontroller : MonoBehaviour
         {
             speed = 7.5f;
         }
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            Interact();
+        }
     }
 
+    void Interact()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, interactionDistance))
+        {
+            KeyCard keyCard = hit.transform.GetComponent<KeyCard>();
+            if (keyCard != null)
+            {
+                keyCard.Remove();
+                keyCardGrabbed = true;
+            }
+
+            Console console = hit.transform.GetComponent<Console>();
+            if (console != null && !keyCardGrabbed)
+            {
+                console.DisplayDialog();
+            }
+            if (console != null && keyCardGrabbed)
+            {
+                SceneManager.LoadScene(3);
+            }
+        }
+    }
      void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
                 SceneManager.LoadScene(2);
             }
-    }
-
-    public void PlaySound(AudioClip clip)
-    {
-        audioSource.PlayOneShot(clip);
     }
 }
