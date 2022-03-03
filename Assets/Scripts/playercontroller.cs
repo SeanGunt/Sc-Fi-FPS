@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
   bool canShoot;
   float chargeMax = 5f;
   float currentCharge;
+  public GameObject shell;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -120,7 +121,6 @@ public class PlayerController : MonoBehaviour
                 return;
             }
         }
-        Debug.Log(currentCharge);
     }
 
     void Interact()
@@ -162,7 +162,9 @@ public class PlayerController : MonoBehaviour
             }
             
             GameObject impactGO = Instantiate(impactEffect, shoot.point, Quaternion.LookRotation(shoot.normal));
+            GameObject shellGO = Instantiate(shell, shoot.point, Quaternion.LookRotation(Vector3.up, -shoot.normal)); 
             Destroy(impactGO, 2f);
+            Destroy(shellGO, 10f);
         }
     }
      void OnTriggerEnter(Collider other)
