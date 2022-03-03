@@ -14,6 +14,10 @@ public class EnemyController : MonoBehaviour
     float stunnedTimer;
     float timeStunned = 3.0f;
     bool isStunned;
+    Vector3 walkPoint;
+    bool walkPointSet;
+    public float walkPointRange;
+    public LayerMask whatIsGround;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -49,7 +53,7 @@ public class EnemyController : MonoBehaviour
         if (isPatrolling && !isStunned)
         {
             agent.speed = 5;
-            agent.SetDestination(startPosition);
+            Patroling();
         }
         if (isStunned)
         {
@@ -61,6 +65,36 @@ public class EnemyController : MonoBehaviour
                 isStunned = false;
             }
         }
+    }
+    void Patroling()
+    {
+        if (!walkPointSet)
+        {
+            SearchWalkPoint();
+        }
+        if (walkPointSet)
+        {
+            agent.SetDestination(walkPoint);
+        }
+
+        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+
+        if (distanceToWalkPoint.magnitude < 1f)
+        {
+            walkPointSet = false;
+        }
+    }
+
+    void SearchWalkPoint()
+    {
+        float randomZ = Random.Range(-walkPointRange, walkPointRange);
+        float randomX = Random.Range(-walkPointRange, walkPointRange);
+
+        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+
+        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround));
+
+        walkPointSet = true;
     }
 
     public void Stunned()
