@@ -297,6 +297,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 82266812}
   m_CullTransparentMesh: 1
+--- !u!1 &112561084 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b4f6d4b98d2101348b1a697787428829, type: 3}
+  m_PrefabInstance: {fileID: 1158641467}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &137434592
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4477,7 +4482,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -6552,6 +6557,7 @@ MonoBehaviour:
   gunChargeImage: {fileID: 1492187588}
   impactEffect: {fileID: 5073564773720432088, guid: 306a19ded720dc5469358de728d73558, type: 3}
   shell: {fileID: 671746328661527282, guid: 28bb1acd19076fe4fa5b6ca9a277eb0f, type: 3}
+  gun: {fileID: 112561084}
 --- !u!82 &1520138780
 AudioSource:
   m_ObjectHideFlags: 0
