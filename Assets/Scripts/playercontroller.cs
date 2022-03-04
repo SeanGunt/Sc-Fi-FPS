@@ -38,6 +38,14 @@ public class PlayerController : MonoBehaviour
         currentStamina = maxStamina;
         currentCharge = chargeMax;
     }
+    
+    void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                SceneManager.LoadScene(2);
+            }
+        }
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -165,11 +173,4 @@ public class PlayerController : MonoBehaviour
             Destroy(shellGO, 10f);
         }
     }
-     void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Enemy"))
-            {
-                SceneManager.LoadScene(2);
-            }
-        }
-    }
+}
