@@ -6,9 +6,12 @@ public class Console : MonoBehaviour
     float timerDisplay = -1.0f;
     public GameObject keyCardDialog;
     PlayerController playerController;
+    AudioSource audioSource;
+    public AudioClip restrictedAudioClip;
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         keyCardDialog.SetActive(false);
         GameObject playerControllerObject = GameObject.FindWithTag("Player");
         playerController = playerControllerObject.GetComponent<PlayerController>();
@@ -26,6 +29,7 @@ public class Console : MonoBehaviour
     }
     public void DisplayDialog()
     {
+        audioSource.PlayOneShot(restrictedAudioClip);
         timerDisplay = displayTime;
         keyCardDialog.SetActive(true);
     }

@@ -7,8 +7,9 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused;
     public GameObject PauseMenuUI;
+    public GameObject reticle;
 
-        void Update()
+    void Update()
     {
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -26,7 +27,9 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        reticle.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         PauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -34,7 +37,9 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        reticle.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         PauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;

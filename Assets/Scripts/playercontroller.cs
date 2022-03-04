@@ -1,46 +1,40 @@
-using System.Net;
-using System.Net.Mime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-  CharacterController controller;
-  float speed = 7.5f;
-  Vector3 velocity;
-  float gravity = -9.81f * 1.5f;
-  public Transform groundCheck;
+  private CharacterController controller;
   public float groundDistance = 0.4f;
-  public LayerMask groundMask;
-  private bool isGrounded;
   public float jumpHeight = 1.5f;
-  bool isSprinting;
-  public AudioClip winSound;
-  public AudioClip loseSound;
-  public AudioClip firingSound;
-  public AudioClip bgmusicSound;
-  AudioSource audioSource;
-  public Camera playerCamera;
+  float speed = 7.5f;
+  float gravity = -9.81f * 1.5f;
   float interactionDistance = 3f;
   float shootDistance = 100.0f;
-  bool keyCardGrabbed = false;
   float maxStamina = 4f;
   float currentStamina;
+  float chargeMax = 5f;
+  float currentCharge;
+  private AudioSource audioSource;
+  public AudioClip firingSound;
+  public AudioClip pickupSound;
+  private bool isGrounded;
+  private bool isSprinting;
+  private bool canShoot;
+  private bool keyCardGrabbed = false;
+  private Vector3 velocity;
+  public Transform groundCheck;
+  public LayerMask groundMask;
+  public Camera playerCamera;
   public Image staminaBarImage;
   public Image gunChargeImage;
   public GameObject impactEffect;
-  bool canShoot;
-  float chargeMax = 5f;
-  float currentCharge;
   public GameObject shell;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
         audioSource= GetComponent<AudioSource>();
-        audioSource.loop = true;
-        audioSource.clip = bgmusicSound;
-        audioSource.Play();
         currentStamina = maxStamina;
         currentCharge = chargeMax;
     }
@@ -59,7 +53,7 @@ public class PlayerController : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded && currentStamina > 0f)
+        if (Input.GetButtonDown("Jump") && isGrounded && currentStamina > 0f && !PauseMenu.GameIsPaused)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             currentStamina = currentStamina - 0.25f;
@@ -90,6 +84,7 @@ public class PlayerController : MonoBehaviour
         {
             speed = 7.5f;
         }
+
         if (!canShoot)
         {
             currentCharge = Mathf.Clamp(currentCharge += Time.deltaTime, 0.0f, chargeMax);
@@ -105,14 +100,14 @@ public class PlayerController : MonoBehaviour
             canShoot = false;
         }
 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Interact();
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (canShoot)
+            if (canShoot && !PauseMenu.GameIsPaused)
             {
                 Shoot();
             }
@@ -132,6 +127,8 @@ public class PlayerController : MonoBehaviour
             if (keyCard != null)
             {
                 keyCard.Remove();
+                audioSource.volume = 1f;
+                audioSource.PlayOneShot(pickupSound);
                 keyCardGrabbed = true;
             }
 
@@ -149,6 +146,7 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
+        audioSource.volume = 0.25f;
         gunChargeImage.fillAmount = 0.0f;
         audioSource.PlayOneShot(firingSound);
         currentCharge = 0.0f;
@@ -173,5 +171,5 @@ public class PlayerController : MonoBehaviour
             {
                 SceneManager.LoadScene(2);
             }
+        }
     }
-}

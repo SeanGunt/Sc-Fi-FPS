@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
     bool walkPointSet;
     public float walkPointRange;
     public LayerMask whatIsGround;
+    public SphereCollider sphereCollider;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -47,20 +48,25 @@ public class EnemyController : MonoBehaviour
             {
                 audioSource.Play();
             }
+            TreadsController.Instance.animator.speed = 2;
             agent.speed = 10;
             agent.SetDestination(player.transform.position);
         }
         if (isPatrolling && !isStunned)
         {
+            TreadsController.Instance.animator.speed = 1;
             agent.speed = 5;
             Patroling();
         }
         if (isStunned)
         {
+            sphereCollider.isTrigger = false;
+            TreadsController.Instance.animator.speed = 0;
             agent.speed = 0;
             stunnedTimer -= Time.deltaTime;
             if (stunnedTimer < 0)
             {
+                sphereCollider.isTrigger = true;
                 stunnedTimer = timeStunned;
                 isStunned = false;
             }
@@ -92,9 +98,10 @@ public class EnemyController : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround));
-
-        walkPointSet = true;
+        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
+        {
+            walkPointSet = true;
+        }
     }
 
     public void Stunned()
