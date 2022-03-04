@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System;
 using UnityEngine;
 
 public class WeaponSway : MonoBehaviour

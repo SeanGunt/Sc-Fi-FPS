@@ -85,7 +85,7 @@ public class EnemyController : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        if (distanceToWalkPoint.magnitude < 1f)
+        if (distanceToWalkPoint.magnitude < 2f)
         {
             walkPointSet = false;
         }
@@ -112,5 +112,6 @@ public class EnemyController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, lookRadius);
+        Gizmos.DrawWireSphere(this.transform.position, walkPointRange);
     }
 }

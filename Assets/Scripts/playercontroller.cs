@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
   private CharacterController controller;
   public float groundDistance = 0.4f;
-  public float jumpHeight = 1.5f;
+  public float jumpHeight = 1.75f;
   float speed = 7.5f;
   float gravity = -9.81f * 1.5f;
   float interactionDistance = 3f;
@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
   public Image gunChargeImage;
   public GameObject impactEffect;
   public GameObject shell;
+  public ParticleSystem muzzleFlash;
 
     void Start()
     {
@@ -86,7 +87,7 @@ public class PlayerController : MonoBehaviour
 
         if (currentStamina > 0.0f && isSprinting)
         {
-            speed = 11f;
+            speed = 9f;
         }
         else
         {
@@ -118,9 +119,11 @@ public class PlayerController : MonoBehaviour
             if (canShoot && !PauseMenu.GameIsPaused)
             {
                 Shoot();
+                Recoil.Instance.AddRecoil();
             }
             else
             {
+                Recoil.Instance.StopRecoil();
                 return;
             }
         }
@@ -155,6 +158,7 @@ public class PlayerController : MonoBehaviour
     void Shoot()
     {
         audioSource.volume = 0.25f;
+        muzzleFlash.Play();
         gunChargeImage.fillAmount = 0.0f;
         audioSource.PlayOneShot(firingSound);
         currentCharge = 0.0f;
@@ -168,7 +172,7 @@ public class PlayerController : MonoBehaviour
             }
             
             GameObject impactGO = Instantiate(impactEffect, shoot.point, Quaternion.LookRotation(shoot.normal));
-            GameObject shellGO = Instantiate(shell, shoot.point, Quaternion.LookRotation(Vector3.up, -shoot.normal)); 
+            GameObject shellGO = Instantiate(shell, shoot.point, Quaternion.LookRotation(Vector3.one, -shoot.normal));
             Destroy(impactGO, 2f);
             Destroy(shellGO, 10f);
         }
