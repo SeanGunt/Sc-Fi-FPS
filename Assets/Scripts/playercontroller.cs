@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
   public Image gunChargeImage;
   public GameObject impactEffect;
   public GameObject shell;
+  public GameObject gun;
   public ParticleSystem muzzleFlash;
 
     void Start()
@@ -138,7 +139,7 @@ public class PlayerController : MonoBehaviour
             if (keyCard != null)
             {
                 keyCard.Remove();
-                audioSource.volume = 1f;
+                audioSource.volume = 0.90f;
                 audioSource.PlayOneShot(pickupSound);
                 keyCardGrabbed = true;
             }
@@ -157,7 +158,7 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
-        audioSource.volume = 0.25f;
+        audioSource.volume = 0.135f;
         muzzleFlash.Play();
         gunChargeImage.fillAmount = 0.0f;
         audioSource.PlayOneShot(firingSound);
@@ -172,7 +173,7 @@ public class PlayerController : MonoBehaviour
             }
             
             GameObject impactGO = Instantiate(impactEffect, shoot.point, Quaternion.LookRotation(shoot.normal));
-            GameObject shellGO = Instantiate(shell, shoot.point, Quaternion.LookRotation(Vector3.one, -shoot.normal));
+            GameObject shellGO = Instantiate(shell, gun.transform.position, Quaternion.LookRotation(Vector3.forward));
             Destroy(impactGO, 2f);
             Destroy(shellGO, 10f);
         }

@@ -13,4 +13,9 @@ public class MainMenuScript : MonoBehaviour
         Debug.Log("quited");
         Application.Quit();
     }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

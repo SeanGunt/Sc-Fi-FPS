@@ -4,7 +4,7 @@ public class Recoil : MonoBehaviour
 {
     public static Recoil Instance { get; private set; }
     public Vector3 upRecoil;
-    Vector3 originalRoation;
+    Vector3 originalRotation;
     float smooth;
     protected void Awake()
     {
@@ -12,7 +12,7 @@ public class Recoil : MonoBehaviour
         {
             Instance = this;
         }
-        originalRoation = this.transform.eulerAngles;
+        originalRotation = this.transform.eulerAngles;
     }
     public void AddRecoil()
     {
@@ -21,6 +21,6 @@ public class Recoil : MonoBehaviour
 
     public void StopRecoil()
     {
-        Vector3.Lerp(upRecoil, originalRoation, smooth * Time.deltaTime);
+        Vector3.Lerp(upRecoil, originalRotation, smooth * Time.deltaTime);
     }
 }

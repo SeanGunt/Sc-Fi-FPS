@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
     public AudioClip activateSound;
     AudioSource audioSource;
     float stunnedTimer;
-    float timeStunned = 3.0f;
+    float timeStunned = 2.5f;
     bool isStunned;
     Vector3 walkPoint;
     bool walkPointSet;
@@ -49,13 +49,13 @@ public class EnemyController : MonoBehaviour
                 audioSource.Play();
             }
             TreadsController.Instance.animator.speed = 2;
-            agent.speed = 10;
+            agent.speed = 12;
             agent.SetDestination(player.transform.position);
         }
         if (isPatrolling && !isStunned)
         {
             TreadsController.Instance.animator.speed = 1;
-            agent.speed = 5;
+            agent.speed = 7;
             Patroling();
         }
         if (isStunned)
@@ -85,7 +85,7 @@ public class EnemyController : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        if (distanceToWalkPoint.magnitude < 2f)
+        if (distanceToWalkPoint.magnitude < 2.5f)
         {
             walkPointSet = false;
         }
