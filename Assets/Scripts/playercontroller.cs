@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
   float currentStamina;
   float chargeMax = 5f;
   float currentCharge;
+  float timeTillDeath = 90f;
+  float deathTimer;
   private AudioSource audioSource;
   public AudioClip firingSound;
   public AudioClip pickupSound;
@@ -32,6 +34,8 @@ public class PlayerController : MonoBehaviour
   public GameObject shell;
   public GameObject gun;
   public ParticleSystem muzzleFlash;
+  public Text deathTimerText;
+
 
     void Start()
     {
@@ -39,6 +43,8 @@ public class PlayerController : MonoBehaviour
         audioSource= GetComponent<AudioSource>();
         currentStamina = maxStamina;
         currentCharge = chargeMax;
+        deathTimer = timeTillDeath;
+        deathTimerText.text = deathTimer.ToString("n0");
     }
     
     void OnTriggerEnter(Collider other)
@@ -110,7 +116,9 @@ public class PlayerController : MonoBehaviour
             canShoot = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        DeathTimer();
+
+        if (Input.GetKeyDown(KeyCode.E) && !PauseMenu.GameIsPaused)
         {
             Interact();
         }
@@ -127,6 +135,15 @@ public class PlayerController : MonoBehaviour
                 Recoil.Instance.StopRecoil();
                 return;
             }
+        }
+    }
+    void DeathTimer()
+    {
+        deathTimer -= Time.deltaTime;
+        deathTimerText.text = deathTimer.ToString("n0");
+        if (deathTimer <= 0)
+        {
+            SceneManager.LoadScene(2);
         }
     }
 
