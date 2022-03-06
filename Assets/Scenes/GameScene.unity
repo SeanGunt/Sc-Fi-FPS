@@ -4496,7 +4496,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.29
+  m_VoxelSize: 0.26666668
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 3cedfa8ca1d3e0e4ea8716ac654d7a15, type: 2}
 --- !u!1 &744350029
@@ -6487,7 +6487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1520138776}
   agent: {fileID: 1120399668}
-  lookRadius: 22
+  lookRadius: 22.5
   activateSound: {fileID: 8300000, guid: 4e024d7082be17645a6232a5520c38d3, type: 3}
   walkPointRange: 15
   whatIsGround:
@@ -13214,7 +13214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8513424388201257645, guid: 2d620260a7821af4980011e70014be76, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: -7609145667655734672, guid: 2d620260a7821af4980011e70014be76, type: 3}
       propertyPath: m_Layer
